@@ -38,14 +38,25 @@ module.exports = function (app, passport) {
 
 	app.route('/api/:id')
 		.get(isLoggedIn, function (req, res) {
-			res.json(req.user.github);
+			res.json(req.user);
 		});
 
 	app.route('/auth/github')
 		.get(passport.authenticate('github'));
 
+	app.route('/auth/google')
+		.get(passport.authenticate('google', {
+			scope: ['email']
+		}));
+
 	app.route('/auth/github/callback')
 		.get(passport.authenticate('github', {
+			successRedirect: '/',
+			failureRedirect: '/login'
+		}));
+
+	app.route('/auth/google/callback')
+		.get(passport.authenticate('google', {
 			successRedirect: '/',
 			failureRedirect: '/login'
 		}));

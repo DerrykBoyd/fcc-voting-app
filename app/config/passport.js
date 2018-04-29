@@ -1,6 +1,7 @@
 'use strict';
 
 var GitHubStrategy = require('passport-github').Strategy;
+var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var User = require('../models/users');
 var configAuth = require('./auth');
 
@@ -15,14 +16,15 @@ module.exports = function (passport) {
 		});
 	});
 
-	passport.use(new GitHubStrategy({
-		clientID: configAuth.githubAuth.clientID,
-		clientSecret: configAuth.githubAuth.clientSecret,
-		callbackURL: configAuth.githubAuth.callbackURL
+	passport.use(new GoogleStrategy ({
+		clientID: configAuth.googleAuth.clientID,
+		clientSecret: configAuth.googleAuth.clientSecret,
+		callbackURL: configAuth.googleAuth.callbackURL
 	},
 	function (token, refreshToken, profile, done) {
+		console.log(profile);
 		process.nextTick(function () {
-			User.findOne({ 'github.id': profile.id }, function (err, user) {
+			User.findOne({ 'userID': profile.id }, function (err, user) {
 				if (err) {
 					return done(err);
 				}
@@ -32,10 +34,42 @@ module.exports = function (passport) {
 				} else {
 					var newUser = new User();
 
-					newUser.github.id = profile.id;
-					newUser.github.username = profile.username;
-					newUser.github.displayName = profile.displayName;
-					newUser.github.publicRepos = profile._json.public_repos;
+					newUser.userID = profile.id;
+					newUser.username = profile.displayName;
+					newUser.nbrClicks.clicks = 0;
+
+					newUser.save(function (err) {
+						if (err) {
+							throw err;
+						}
+
+						return done(null, newUser);
+					});
+				}
+			});
+		});
+	}));
+
+	passport.use(new GitHubStrategy({
+		clientID: configAuth.githubAuth.clientID,
+		clientSecret: configAuth.githubAuth.clientSecret,
+		callbackURL: configAuth.githubAuth.callbackURL
+	},
+	function (token, refreshToken, profile, done) {
+		console.log(profile);
+		process.nextTick(function () {
+			User.findOne({ 'userID': profile.id }, function (err, user) {
+				if (err) {
+					return done(err);
+				}
+
+				if (user) {
+					return done(null, user);
+				} else {
+					var newUser = new User();
+
+					newUser.username = profile.username;
+					newUser.userID = profile.id;
 					newUser.nbrClicks.clicks = 0;
 
 					newUser.save(function (err) {
