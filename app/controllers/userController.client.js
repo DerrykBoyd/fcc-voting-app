@@ -2,7 +2,6 @@
 
 (function () {
 
-   var profileId = document.querySelector('#profile-id') || null;
    var displayName = document.querySelector('#display-name');
    var apiUrl = appUrl + '/api/:id';
 
@@ -14,12 +13,8 @@
       var userObject = JSON.parse(data);
       console.log(userObject);
 
-      if (userObject.username !== null) {
+      if (displayName !== null) {
          updateHtmlElement(userObject, displayName, 'username');
-      }
-
-      if (profileId !== null) {
-         updateHtmlElement(userObject, profileId, 'userID'); 
       }
 
    }));

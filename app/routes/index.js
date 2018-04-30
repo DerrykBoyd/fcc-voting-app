@@ -2,6 +2,7 @@
 
 var path = process.cwd();
 var ClickHandler = require(path + '/app/controllers/clickHandler.server.js');
+var PollHandler = require(path + '/app/controllers/pollHandler.server.js');
 
 module.exports = function (app, passport) {
 
@@ -13,17 +14,36 @@ module.exports = function (app, passport) {
 		}
 	}
 
+	function checkLoggedIn (req, res, next) {
+		if (req.isAuthenticated()) {
+			return next();
+		} else {
+			return false;
+		}
+	}
+
 	var clickHandler = new ClickHandler();
+	var pollHandler = new PollHandler();
 
 	app.route('/')
-		.get(isLoggedIn, function (req, res) {
+		.get(function (req, res) {
 			res.sendFile(path + '/public/index.html');
+		});
+
+	app.route('/polls')
+		.get(isLoggedIn, function (req, res) {
+			res.sendFile(path + '/public/polls.html');
 		});
 
 	app.route('/login')
 		.get(function (req, res) {
 			res.sendFile(path + '/public/login.html');
-		});
+		})
+		.post(passport.authenticate('local', {
+			successRedirect: '/',
+			failureRedirect: '/login',
+			failureFlash: true
+		}));
 
 	app.route('/logout')
 		.get(function (req, res) {
@@ -31,13 +51,13 @@ module.exports = function (app, passport) {
 			res.redirect('/login');
 		});
 
-	app.route('/profile')
+	app.route('/my-polls')
 		.get(isLoggedIn, function (req, res) {
-			res.sendFile(path + '/public/profile.html');
+			res.sendFile(path + '/public/my-polls.html');
 		});
 
 	app.route('/api/:id')
-		.get(isLoggedIn, function (req, res) {
+		.get(checkLoggedIn, function (req, res) {
 			res.json(req.user);
 		});
 
@@ -65,4 +85,7 @@ module.exports = function (app, passport) {
 		.get(isLoggedIn, clickHandler.getClicks)
 		.post(isLoggedIn, clickHandler.addClick)
 		.delete(isLoggedIn, clickHandler.resetClicks);
+
+	app.route('/api/polls')
+		.post(pollHandler.addPoll)
 };

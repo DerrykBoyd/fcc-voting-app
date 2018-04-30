@@ -2,38 +2,61 @@
 
 <html>
 
-	<head>
-		<title>Clementine.js - The elegant and lightweight full stack JavaScript boilerplate.</title>
-		
-		<link href="/public/css/main.css" rel="stylesheet" type="text/css">
-	</head>
+<head>
+	<title>dBoydGit - Poll Generator</title>
+	<link rel="stylesheet" href="/public/css/flatly.min.css" type="text/css">
 
-	<header>
-		<p>Welcome, <span id="display-name"></span>!</p>
-		<a class="menu" href="/profile">Profile</a>
-		<p>|</p>
-		<a class="menu" href="/logout">Logout</a>
-	</header>
+	<link href="/public/css/main.css" rel="stylesheet" type="text/css">
+</head>
 
-	<body>
+<body>
+	<div v-cloak id="app">
+		<nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+			<a class="navbar-brand" href="#">Poll Generator</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01"
+			 aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarColor01">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item active">
+						<span v-if="loggedIn" class="nav-link" >{{ username }}</span>
+					</li>
+					<li v-if="loggedIn" class="nav-item">
+						<a class="nav-link" href="/my-polls">My Polls</a>
+					</li>
+					<li v-if="loggedIn" class="nav-item">
+						<a class="nav-link" href="/logout">Logout</a>
+					</li>
+					<li v-if="!loggedIn" class="nav-item logged-out">
+						<a class="nav-link" href="/login">Login</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
 		<div class="container">
-			<img src="/public/img/clementine_150.png" />
-			<br />
-			<p class="clementine-text">Clementine.js</p>
+			<h1 class="text-primary text-center">Poll Generator</h1>
 		</div>
 	
-		<div class="container">
-			<p>You have clicked the button <span id="click-nbr"></span> times.</p>
-			<br />
-			<div class="btn-container">
-				<button type="submit" class="btn btn-add">CLICK ME!</button>
-				<button class="btn btn-delete">RESET</button>
-			</div>
+		<div v-if="loggedIn" class="container">
+			<p>**List the created polls here**</p>
+			<button v-on:click="addPoll">Add Poll Test</button>
+			<p>The button above should add a new default poll to the DB.</p>
 		</div>
-		
-		<script type="text/javascript" src="common/ajax-functions.js"></script>
-		<script type="text/javascript" src="controllers/clickController.client.js"></script>
-		<script type="text/javascript" src="controllers/userController.client.js"></script>
-	</body>
+	</div>
+
+	<!-- Script Tags -->
+	<script
+	src="https://code.jquery.com/jquery-3.3.1.min.js"
+	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+	 crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+	 crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>	<script type="text/javascript" src="common/ajax-functions.js"></script>
+	<script type="text/javascript" src="common/ajax-functions.js"></script>
+	<script type="text/javascript" src="controllers/indexController.client.js"></script>
+</body>
 
 </html>

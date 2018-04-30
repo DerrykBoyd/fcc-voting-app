@@ -22,7 +22,7 @@ module.exports = function (passport) {
 		callbackURL: configAuth.googleAuth.callbackURL
 	},
 	function (token, refreshToken, profile, done) {
-		console.log(profile);
+		// console.log(profile);
 		process.nextTick(function () {
 			User.findOne({ 'userID': profile.id }, function (err, user) {
 				if (err) {
@@ -56,7 +56,7 @@ module.exports = function (passport) {
 		callbackURL: configAuth.githubAuth.callbackURL
 	},
 	function (token, refreshToken, profile, done) {
-		console.log(profile);
+		// console.log(profile);
 		process.nextTick(function () {
 			User.findOne({ 'userID': profile.id }, function (err, user) {
 				if (err) {
