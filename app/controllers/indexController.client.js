@@ -4,7 +4,7 @@ var apiUrl = appUrl + '/api/:id';
 var pollUrl = appUrl + '/api/polls';
 
 var testPoll = {
-  question: 'New test Poll!!!',
+  question: 'GitHub test Poll!!!',
   options: [
     {
       title: 'option 1',

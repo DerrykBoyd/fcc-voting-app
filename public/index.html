@@ -36,29 +36,29 @@
 			<div v-if="loggedIn" class="container">
 				<h4 class="text-center text-primary my-3">Welcome, {{username}}. Create new polls or view your polls below.</h4>
 				<div class="row justify-content-center">
-					<div><button v-on:click="addPoll" class="btn btn-primary d-inline-block">New Poll</button></div>
-					<div><button v-on:click="togglePolls" class="btn btn-primary d-inline-block">
+					<div><button v-on:click="addPoll" class="btn btn-primary d-inline-block mx-3">New Poll</button></div>
+					<div><button v-on:click="togglePolls" class="btn btn-primary d-inline-block mx-3">
 						<span v-if="showMyPolls">All Polls</span><span v-if="!showMyPolls">My Polls</span></button></div>
 				</div>
 			</div>
 	
 			<div v-if="!loggedIn">
 				<h3 class="text-center text-primary my-3">Login to create and share new polls...</h3>
-				<a class="btn btn-primary d-block mx-auto"
+				<a id="login-btn" class="btn btn-primary d-block mx-auto"
 				href="/login">Login</a>
 			</div>
 	
-			<div v-if="!showMyPolls" class="poll-list container">
+			<div v-if="!showMyPolls" class="poll-list container mt-4">
 				<ul class="list-group">
-					<li class="list-group-item" v-for="poll in polls">
-						<a class="d-block" :href="'/poll/' + poll.pollID">{{ poll.question }}</a>
+					<li class="list-group-item list-group-item-action text-center p-0" v-for="poll in polls">
+						<a class="d-block p-2" :href="'/poll/' + poll.pollID"><p class="m-0">{{ poll.question }}</p></a>
 					</li>
 				</ul>
 			</div>
-			<div v-if="showMyPolls" class="poll-list container">
+			<div v-if="showMyPolls" class="poll-list container mt-4">
 				<ul class="list-group">
-					<li class="list-group-item" v-for="poll in myPolls">
-						<a class="d-block" :href="'/poll/' + poll.pollID">{{ poll.question }}</a>
+					<li class="list-group-item list-group-item-action text-center p-0" v-for="poll in myPolls">
+						<a class="d-block p-2" :href="'/poll/' + poll.pollID"><p class="m-0">{{ poll.question }}</p></a>
 					</li>
 				</ul>
 			</div>

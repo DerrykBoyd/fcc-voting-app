@@ -36,7 +36,6 @@ module.exports = function (passport) {
 
 					newUser.userID = profile.id;
 					newUser.username = profile.displayName;
-					newUser.nbrClicks.clicks = 0;
 
 					newUser.save(function (err) {
 						if (err) {
@@ -69,8 +68,7 @@ module.exports = function (passport) {
 					var newUser = new User();
 
 					newUser.username = profile.username;
-					newUser.userID = profile.id;
-					newUser.nbrClicks.clicks = 0;
+					newUser.userID = profile.id;;
 
 					newUser.save(function (err) {
 						if (err) {
