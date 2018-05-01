@@ -39,9 +39,12 @@
 		</div>
 	
 		<div v-if="loggedIn" class="container">
-			<p>**List the created polls here**</p>
-			<button v-on:click="addPoll">Add Poll Test</button>
+			<div><button v-on:click="addPoll" class="d-block mx-auto">Add Poll (Test)</button></div>
 			<p>The button above should add a new default poll to the DB.</p>
+		</div>
+
+		<div class="container">
+			<p>**TODO - List the created polls here**</p>
 		</div>
 	</div>
 
