@@ -11,12 +11,24 @@ function PollHandler () {
 	this.getPolls = function (req, res) {
 		Polls
 			.find ({ 'ownerID': req.user.userID })
+			.sort ({_id:-1})
 			.exec(function (err, result) {
 				if (err) { throw err; }
 
 				res.json(result);
 			});
 	};
+
+	this.getAllPolls = function (req, res) {
+		Polls
+			.find()
+			.sort({_id: -1})
+			.exec(function (err, result) {
+				if (err) throw err;
+
+				res.json(result)
+			})
+	}
 
 	this.addPoll = function (req, res) {
 

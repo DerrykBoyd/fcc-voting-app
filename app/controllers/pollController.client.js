@@ -3,23 +3,14 @@
 var apiUrl = appUrl + '/api/:id';
 var pollUrl = appUrl + '/api/polls';
 
-var testPoll = {
-  question: 'New test Poll!!!',
-  options: [
-    {
-      title: 'option 1',
-      votes: 0
-    },
-    {
-      title: 'option 2',
-      votes: 0
-    }]
-};
+var currentUrl = new URL(window.location);
+console.log(currentUrl);
 
 var vm = new Vue({
     el: '#app',
     data: {
       username: '',
+      path: currentUrl.pathname,
       loggedIn: false,
       showMyPolls: false,
       polls: [],
