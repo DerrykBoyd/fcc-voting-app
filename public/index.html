@@ -5,7 +5,8 @@
 <head>
 	<title>dBoydGit - Poll Creator</title>
 	<link rel="stylesheet" href="/public/css/flatly.min.css" type="text/css">
-
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
+	 crossorigin="anonymous">
 	<link href="/public/css/main.css" rel="stylesheet" type="text/css">
 </head>
 
@@ -20,7 +21,7 @@
 			<div class="collapse navbar-collapse" id="navbarColor01">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item active">
-						<span v-if="loggedIn" class="nav-link" >{{ username }}</span>
+						<span v-if="loggedIn" class="nav-link">{{ username }}</span>
 					</li>
 					<li v-if="loggedIn" class="nav-item">
 						<a class="nav-link" href="/logout">Logout</a>
@@ -34,47 +35,82 @@
 		<div id="content">
 
 			<div v-if="loggedIn" class="container">
-				<h4 class="text-center text-primary my-3">Welcome, {{username}}. Create new polls or view your polls below.</h4>
-				<div class="row justify-content-center">
-					<div><button v-on:click="addPoll" class="btn btn-primary d-inline-block mx-3">New Poll</button></div>
-					<div><button v-on:click="togglePolls" class="btn btn-primary d-inline-block mx-3">
-						<span v-if="showMyPolls">All Polls</span><span v-if="!showMyPolls">My Polls</span></button></div>
+				<h4 v-if="!showNewPoll" class="text-center text-primary my-3">Welcome, {{username}}. Create new polls or view your polls below.</h4>
+				<div v-if="!showNewPoll" class="row justify-content-center">
+					<div>
+						<button v-on:click="hideForm" class="btn btn-primary d-inline-block mx-3">New Poll</button>
+					</div>
+					<div>
+						<button v-on:click="togglePolls" class="btn btn-primary d-inline-block mx-3">
+							<span v-if="showMyPolls">All Polls</span>
+							<span v-if="!showMyPolls">My Polls</span>
+						</button>
+					</div>
 				</div>
 			</div>
-	
+
 			<div v-if="!loggedIn">
 				<h3 class="text-center text-primary my-3">Login to create and share new polls...</h3>
-				<a id="login-btn" class="btn btn-primary d-block mx-auto"
-				href="/login">Login</a>
+				<a id="login-btn" class="btn btn-primary d-block mx-auto" href="/login">Login</a>
 			</div>
-	
-			<div v-if="!showMyPolls" class="poll-list container mt-4">
-				<ul class="list-group">
-					<li class="list-group-item list-group-item-action text-center p-0" v-for="poll in polls">
-						<a class="d-block p-2" :href="'/poll/' + poll.pollID"><p class="m-0">{{ poll.question }}</p></a>
-					</li>
-				</ul>
-			</div>
-			<div v-if="showMyPolls" class="poll-list container mt-4">
-				<ul class="list-group">
-					<li class="list-group-item list-group-item-action text-center p-0" v-for="poll in myPolls">
-						<a class="d-block p-2" :href="'/poll/' + poll.pollID"><p class="m-0">{{ poll.question }}</p></a>
-					</li>
-				</ul>
+
+			<div id="new-poll" v-if="showNewPoll" class="container">
+				<button v-on:click="hideForm" class="my-3 btn btn-primary d-inline-block">
+					<i class="fas fa-arrow-left"></i>Back</button>
+				<div id="poll-form" class="form-group">
+					<div class="mb-4">
+						<label class="col-form-label" for="inputDefault">Poll Question</label>
+						<input type="text" class="form-control" placeholder="Poll Question" id="inputDefault" v-model="pollData.question">
+					</div>
+					<div id="poll-form-options" class="mt-2" v-for="(option, index) in pollData.options">
+						<label class="col-form-label col-form-label-sm" for="inputSmall">Option {{ index + 1 }}
+							<i v-if="index > 1" v-on:click="removeOption" class="fas fa-minus-circle p-0 text-danger"></i>
+						</label>
+						<input class="form-control form-control-sm" type="text" placeholder="poll option" id="inputSmall" v-model="option.title">
+					</div>
+				</div>
+				<div>
+					<button v-on:click="addOption" class="btn btn-link px-0">
+						<i class="fas fa-plus-circle"></i>New Option</button>
+				</div>
+				<div v-if="!checkForm">
+					<button class="mt-3 btn btn-primary disabled">Submit Poll</button>
+					<div class="text-danger mt-1"><small>All fields required</small></div>
+				</div>
+				<button v-if="checkForm" v-on:click="addPoll" class="my-3 btn btn-primary">Submit Poll</button>
 			</div>
 		</div>
+
+		<div v-if="!hideAllPolls" class="poll-list container mt-4">
+			<ul class="list-group">
+				<li class="list-group-item list-group-item-action text-center p-0" v-for="poll in polls">
+					<a class="d-block p-2" :href="'/poll/' + poll.pollID">
+						<p class="m-0">{{ poll.question }}</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div v-if="!hideMyPolls" class="poll-list container mt-4">
+			<ul class="list-group">
+				<li class="list-group-item list-group-item-action text-center p-0" v-for="poll in myPolls">
+					<a class="d-block p-2" :href="'/poll/' + poll.pollID">
+						<p class="m-0">{{ poll.question }}</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
 	</div>
 
 	<!-- Script Tags -->
-	<script
-	src="https://code.jquery.com/jquery-3.3.1.min.js"
-	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-	crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	 crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
 	 crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 	 crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>	<script type="text/javascript" src="common/ajax-functions.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+	<script type="text/javascript" src="common/ajax-functions.js"></script>
 	<script type="text/javascript" src="common/ajax-functions.js"></script>
 	<script type="text/javascript" src="controllers/indexController.client.js"></script>
 </body>

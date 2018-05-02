@@ -45,6 +45,8 @@ function PollHandler () {
 				throw err;
 			}
 		});
+
+		res.send();
 		
 	};
 

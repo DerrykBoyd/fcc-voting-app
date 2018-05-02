@@ -11,6 +11,10 @@ var Polls = new Schema({
 		_id: false,
 		title: String,
 		votes: Number,
+		voters: [{
+			id: String,
+			ip: String,
+		}],
 	}]
 });
 

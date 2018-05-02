@@ -29,6 +29,10 @@ body {
 	margin: auto
 }
 
+.list-group-item {
+	min-height: 2.5rem;
+}
+
 li a:hover {
 	text-decoration: none;
 }
@@ -84,6 +88,23 @@ i {
 	height: 32px;
 	width: 32px;
 	padding: 0;
+}
+
+/***** Form Styling *****/
+
+.btn i {
+	font-size: 1.2rem;
+	max-height: 1.2rem;
+	margin: 0 0.5rem 0 0;
+	position: relative;
+	top: 0.125rem;
+}
+
+label i::before {
+	font-size: 0.9rem;
+	margin: 0 0 0 1rem;
+	max-height: 1rem;
+	cursor: pointer;
 }
 
 [v-cloak] { display: none; }

@@ -3,17 +3,19 @@
 var apiUrl = appUrl + '/api/:id';
 var pollUrl = appUrl + '/api/polls';
 
-var testPoll = {
-  question: 'GitHub test Poll!!!',
+var defaultPoll = {
+  question: '',
   options: [
     {
-      title: 'option 1',
-      votes: 0
+      title: '',
     },
     {
-      title: 'option 2',
-      votes: 0
-    }]
+      title: '',
+    },
+    {
+      title: '',
+    },
+  ]
 };
 
 var vm = new Vue({
@@ -21,31 +23,83 @@ var vm = new Vue({
     data: {
       username: '',
       loggedIn: false,
+      showAllPolls: true,
       showMyPolls: false,
+      showNewPoll: false,
+      formOK: false,
       polls: [],
       myPolls: [],
+      pollData: {
+        question: '',
+        options: [
+          {
+            title: '',
+          },
+          {
+            title: '',
+          },
+          {
+            title: '',
+          },
+        ]
+      },
+    },
+    computed: {
+      hideMyPolls: function() {
+        if (!this.showAllPolls && !this.showNewPoll) {
+          return false;
+        } else return true;
+      },
+      hideAllPolls: function() {
+        if (!this.showMyPolls && !this.showNewPoll) {
+          return false;
+        } else return true;
+      },
+      checkForm: function () {
+        if (!this.pollData.question) return false;
+        for (var option of this.pollData.options) {
+          if (!option.title) return false;
+        }
+        return true;
+      },
     },
     methods: {
-      addPoll: function (event) {
-        $.post(pollUrl + '/add', testPoll);
-        this.getPolls();
-        this.getMyPolls();
+      removeOption: function(index) {
+        this.pollData.options.splice(index, 1);
       },
-      getPolls: function (event) {
+      addOption: function() {
+        this.pollData.options.push({
+          title: '',
+        })
+      },
+      hideForm: function() {
+        this.showNewPoll = !this.showNewPoll;
+      },
+      addPoll: function () {
+        $.post(pollUrl + '/add', this.pollData)
+        .done( () => {
+          console.log('poll added!!');
+          this.pollData = defaultPoll;
+          this.hideForm();
+          this.getPolls();
+          this.getMyPolls();
+        });
+      },
+      getPolls: function () {
         var self = this;
         $.get(pollUrl + '/all', function(data){
           self.polls = data;
         });
-        console.log('polls loaded!')
       },
-      getMyPolls: function (event) {
+      getMyPolls: function () {
         var self = this;
         $.get(apiUrl + '/polls', function(data){
           self.myPolls = data;
         });
       },
-      togglePolls: function() {
+      togglePolls: function () {
         this.showMyPolls = !this.showMyPolls;
+        this.showAllPolls = !this.showAllPolls;
       }
     },
     beforeMount() {
