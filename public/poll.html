@@ -5,8 +5,10 @@
 <head>
 	<title>dBoydGit - Poll Creator</title>
 	<link rel="stylesheet" href="/public/css/flatly.min.css" type="text/css">
-
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
+	 crossorigin="anonymous">
 	<link href="/public/css/main.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="../bower/chart.js/dist/Chart.js"></script>
 </head>
 
 <body>
@@ -21,7 +23,10 @@
 			<div class="collapse navbar-collapse" id="navbarColor01">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item active">
-						<span v-if="loggedIn" class="nav-link" >{{ username }}</span>
+						<span v-if="loggedIn" class="nav-link">{{ username }}</span>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/">Home</a>
 					</li>
 					<li v-if="loggedIn" class="nav-item">
 						<a class="nav-link" href="/logout">Logout</a>
@@ -32,9 +37,36 @@
 				</ul>
 			</div>
 		</nav>
-		<div class="container">
+		<div id="content" class="container">
 			<h2 class="text-primary text-center mt-4">**TODO - Page to show selected poll**</h2>
 			<p>This is the path: {{ path }}</p>
+			<div class="fluid-container">
+				<div class="row">
+					<div class="col-md border-right border-primary">
+						<fieldset>
+							<legend>Custom forms</legend>
+							<div class="form-group">
+								<div class="custom-control custom-radio">
+									<input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" checked="">
+									<label class="custom-control-label" for="customRadio1">Toggle this custom radio</label>
+								</div>
+								<div class="custom-control custom-radio">
+									<input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+									<label class="custom-control-label" for="customRadio2">Or toggle this other custom radio</label>
+								</div>
+								<div class="custom-control custom-radio">
+									<input type="radio" id="customRadio3" name="customRadio" class="custom-control-input">
+									<label class="custom-control-label" for="customRadio3">Disabled custom radio</label>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+					<div class="col-md">
+						<div>**TODO - Show results here**</div>
+						<canvas id="myChart" width="400" height="400"></canvas>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 

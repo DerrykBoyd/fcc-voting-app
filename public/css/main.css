@@ -25,7 +25,7 @@ body {
 }
 
 #content {
-	max-width: 50rem;
+	max-width: 60em;
 	margin: auto
 }
 
@@ -108,3 +108,12 @@ label i::before {
 }
 
 [v-cloak] { display: none; }
+
+/******* Poll Styling ******/
+
+#myChart {
+	width: 300px;
+	max-width: 100%;
+	height: 300px;
+	margin: auto;
+}
