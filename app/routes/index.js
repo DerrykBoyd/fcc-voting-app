@@ -80,4 +80,7 @@ module.exports = function (app, passport) {
 
 	app.route('/api/:id/polls')
 		.get(isLoggedIn, pollHandler.getPolls)
+
+	app.route('/api/pollData/:poll')
+		.get(pollHandler.getPollData)
 };

@@ -8,6 +8,15 @@ var Polls = require('../models/polls.js');
 
 function PollHandler () {
 
+	this.getPollData = function (req, res) {
+		console.log(req);
+		Polls.findOne({'pollID': req.params.poll})
+			.exec( function (err, result) {
+				if (err) throw err;
+				res.json(result);
+			})
+	}
+
 	this.getPolls = function (req, res) {
 		Polls
 			.find ({ 'ownerID': req.user.userID })

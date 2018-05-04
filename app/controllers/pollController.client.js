@@ -1,91 +1,117 @@
-'use strict';
+"use strict";
 
-var apiUrl = appUrl + '/api/:id';
-var pollUrl = appUrl + '/api/polls';
+const apiUrl = appUrl + "/api/:id";
+const pollUrl = appUrl + "/api/polls";
+const currentUrl = new URL(window.location);
 
-var currentUrl = new URL(window.location);
-console.log(currentUrl);
+let getIP = function() {
+  $.get("https://api.ipify.org")
+    .done(function(data) {
+      vm.userIP = data;
+    })
+    .fail(function() {
+      $.get("https://json.geoiplookup.io/api")
+        .done(function(data) {
+          vm.userIP = data.ip;
+        })
+        .fail(function(err) {
+          console.log(err);
+        });
+    });
+};
 
 var vm = new Vue({
-    el: '#app',
-    data: {
-      username: '',
-      path: currentUrl.pathname,
-      loggedIn: false,
-      showMyPolls: false,
-      polls: [],
-      myPolls: [],
+  el: "#app",
+  data: {
+    pollID: '',
+    pollData: {},
+    username: '',
+    userIP: '',
+    path: currentUrl.pathname,
+    pollQuestion: '',
+    pollOptions: [],
+    titles: [],
+    loggedIn: false,
+  },
+  methods: {
+    getPollID: function() {
+      this.pollID = this.path.slice(-6);
     },
-    methods: {
-      addPoll: function (event) {
-        $.post(pollUrl + '/add', testPoll);
-        this.getPolls();
-        this.getMyPolls();
-      },
-      getPolls: function (event) {
-        var self = this;
-        $.get(pollUrl + '/all', function(data){
-          self.polls = data;
-        });
-        console.log('polls loaded!')
-      },
-      getMyPolls: function (event) {
-        var self = this;
-        $.get(apiUrl + '/polls', function(data){
-          self.myPolls = data;
-        });
-      },
-      togglePolls: function() {
-        this.showMyPolls = !this.showMyPolls;
-      }
-    },
-    beforeMount() {
-      this.getPolls();
-      this.getMyPolls();
+    getPollData: function(pollID) {
+      let self = this;
+      $.get(appUrl + "/api/pollData/" + pollID, function(data) {
+        self.pollData = data;
+        self.pollQuestion = data.question;
+        self.pollOptions = data.options;
+      });
     }
+  },
+  beforeMount() {
+    getIP();
+    this.getPollID(currentUrl);
+    this.getPollData(this.pollID);
+  }
 });
 
-ajaxFunctions.ready(ajaxFunctions.ajaxRequest('GET', apiUrl, function (data) {
-  var user = JSON.parse(data);
-  if (user.error) {
-    vm.loggedIn = false;
-  } else {
-  vm.loggedIn = true;
-  vm.username = user.username;
-  }
-}));
+ajaxFunctions.ready(
+  ajaxFunctions.ajaxRequest("GET", apiUrl, function(data) {
+    var user = JSON.parse(data);
+    if (user.error) {
+      vm.loggedIn = false;
+    } else {
+      vm.loggedIn = true;
+      vm.username = user.username;
+    }
+  })
+);
+
+// function to set the titles of the chart from poll options
+let titles = [];
+function chartTitles() {
+  let pollID = currentUrl.pathname.slice(-6);
+  $.get(appUrl + "/api/pollData/" + pollID, function(data) {
+    let pollOptions = data.options;
+    for (let option of pollOptions) {
+      titles.push(option.title);
+    }
+    console.log(titles);
+    console.log(barChart.data);
+    barChart.data.labels = titles;
+    barChart.update();
+  });
+} chartTitles();
 
 // Chart.js
-var ctx = $('#myChart');
+var ctx = $("#myChart");
 var barChart = new Chart(ctx, {
-  type: 'doughnut',
+  type: "doughnut",
   data: {
-      labels: ["Red", "Blue", "Yellow"],
-      datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3],
-          backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-              'rgba(255,99,132,1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1
-      }]
+    labels: [],
+    datasets: [
+      {
+        label: "# of Votes",
+        data: [1, 1, 1],
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 206, 86, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+          "rgba(153, 102, 255, 0.2)",
+          "rgba(255, 159, 64, 0.2)"
+        ],
+        borderColor: [
+          "rgba(255,99,132,1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(153, 102, 255, 1)",
+          "rgba(255, 159, 64, 1)"
+        ],
+        borderWidth: 1
+      }
+    ]
   },
   options: {
-    responsive: false,
+    responsive: false
   }
 });
-
-

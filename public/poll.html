@@ -40,29 +40,27 @@
 		<div id="content" class="container">
 			<h2 class="text-primary text-center mt-4">**TODO - Page to show selected poll**</h2>
 			<p>This is the path: {{ path }}</p>
+			<p>This is the userIP: {{ userIP }}</p>
+			<p>Logged in? {{ loggedIn }}</p>
 			<div class="fluid-container">
 				<div class="row">
 					<div class="col-md border-right border-primary">
 						<fieldset>
-							<legend>Custom forms</legend>
+							<p>***TODO - Add functionality for voting, record each vote ot the db tied to the username or the userIP if not logged in.
+								check for previous votes on page load and check the appropriate radio button. Make sure votes are changed when a new
+								radio button is selected.***
+							</p>
+							<legend>{{ pollQuestion }}</legend>
 							<div class="form-group">
-								<div class="custom-control custom-radio">
-									<input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" checked="">
-									<label class="custom-control-label" for="customRadio1">Toggle this custom radio</label>
-								</div>
-								<div class="custom-control custom-radio">
-									<input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
-									<label class="custom-control-label" for="customRadio2">Or toggle this other custom radio</label>
-								</div>
-								<div class="custom-control custom-radio">
-									<input type="radio" id="customRadio3" name="customRadio" class="custom-control-input">
-									<label class="custom-control-label" for="customRadio3">Disabled custom radio</label>
+								<div v-for="(option, index) in pollOptions" class="custom-control custom-radio">
+									<input type="radio" :id="'customRadio' + index" name="customRadio" class="custom-control-input">
+									<label class="custom-control-label" :for="'customRadio' + index">{{ option.title }}</label>
 								</div>
 							</div>
 						</fieldset>
 					</div>
 					<div class="col-md">
-						<div>**TODO - Show results here**</div>
+						<div>**TODO - Bind total votes to the chart view**</div>
 						<canvas id="myChart" width="400" height="400"></canvas>
 					</div>
 				</div>
