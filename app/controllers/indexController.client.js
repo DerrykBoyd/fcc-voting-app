@@ -1,19 +1,19 @@
 'use strict';
 
-var apiUrl = appUrl + '/api/:id';
-var pollUrl = appUrl + '/api/polls';
+const apiUrl = appUrl + '/api/:id';
+const pollUrl = appUrl + '/api/polls';
 
-var defaultPoll = {
+const defaultPoll = {
   question: '',
-  options: [
+  options:[
     {
-      title: '',
+      title: ''
     },
     {
-      title: '',
+      title: ''
     },
     {
-      title: '',
+      title: ''
     },
   ]
 };
@@ -33,15 +33,16 @@ var vm = new Vue({
         question: '',
         options: [
           {
-            title: '',
+            title: ''
           },
           {
-            title: '',
+            title: ''
           },
           {
-            title: '',
+            title: ''
           },
-        ]
+        ],
+        voters: [],
       },
     },
     computed: {

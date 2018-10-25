@@ -74,13 +74,20 @@ module.exports = function (app, passport) {
 			failureRedirect: '/login'
 		}));
 
-	app.route('/api/polls/:poll')
+	app.route('/api/polls/:pollID')
 		.post(pollHandler.addPoll)
 		.get(pollHandler.getAllPolls)
 
 	app.route('/api/:id/polls')
 		.get(isLoggedIn, pollHandler.getPolls)
 
-	app.route('/api/pollData/:poll')
+	app.route('/api/pollData/:pollID')
 		.get(pollHandler.getPollData)
+
+	app.route('/api/:pollID/addVote')
+		.post(pollHandler.addVote)
+		.get(pollHandler.getVotes)
+
+	app.route('/api/checkVote')
+	.post(pollHandler.checkVote)
 };

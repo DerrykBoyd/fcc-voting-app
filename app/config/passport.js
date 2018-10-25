@@ -2,7 +2,7 @@
 
 var GitHubStrategy = require('passport-github').Strategy;
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
-var User = require('../models/users');
+var fccPollUser = require('../models/users');
 var configAuth = require('./auth');
 
 module.exports = function (passport) {
@@ -11,7 +11,7 @@ module.exports = function (passport) {
 	});
 
 	passport.deserializeUser(function (id, done) {
-		User.findById(id, function (err, user) {
+		fccPollUser.findById(id, function (err, user) {
 			done(err, user);
 		});
 	});
@@ -24,7 +24,7 @@ module.exports = function (passport) {
 	function (token, refreshToken, profile, done) {
 		// console.log(profile);
 		process.nextTick(function () {
-			User.findOne({ 'userID': profile.id }, function (err, user) {
+			fccPollUser.findOne({ 'userID': profile.id }, function (err, user) {
 				if (err) {
 					return done(err);
 				}
@@ -32,7 +32,7 @@ module.exports = function (passport) {
 				if (user) {
 					return done(null, user);
 				} else {
-					var newUser = new User();
+					var newUser = new fccPollUser();
 
 					newUser.userID = profile.id;
 					newUser.username = profile.displayName;
@@ -57,7 +57,7 @@ module.exports = function (passport) {
 	function (token, refreshToken, profile, done) {
 		// console.log(profile);
 		process.nextTick(function () {
-			User.findOne({ 'userID': profile.id }, function (err, user) {
+			fccPollUser.findOne({ 'userID': profile.id }, function (err, user) {
 				if (err) {
 					return done(err);
 				}
@@ -65,7 +65,7 @@ module.exports = function (passport) {
 				if (user) {
 					return done(null, user);
 				} else {
-					var newUser = new User();
+					var newUser = new fccPollUser();
 
 					newUser.username = profile.username;
 					newUser.userID = profile.id;;

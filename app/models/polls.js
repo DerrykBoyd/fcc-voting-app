@@ -3,19 +3,14 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Polls = new Schema({
+var fccPollPolls = new Schema({
 	ownerID: String,
 	pollID: String,
 	question: String,
     options: [{
 		_id: false,
 		title: String,
-		votes: Number,
-		voters: [{
-			id: String,
-			ip: String,
-		}],
-	}]
+	}],
 });
 
-module.exports = mongoose.model('Poll', Polls);
+module.exports = mongoose.model('fccPollPolls', fccPollPolls);

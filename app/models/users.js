@@ -3,9 +3,9 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var User = new Schema({
+var fccPollUser = new Schema({
 	username: String,
 	userID: {type: String, unique: true},
 });
 
-module.exports = mongoose.model('User', User);
+module.exports = mongoose.model('fccPollUser', fccPollUser);
