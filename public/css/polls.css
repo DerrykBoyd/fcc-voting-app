@@ -7,6 +7,25 @@
     padding: 1em 3em;
 }
 
+input {
+    margin: 0.5em 0;
+    width: 80%;
+}
+
+.poll-label {
+    display: block;
+    word-wrap: break-word;
+}
+
+#poll-area {
+    word-wrap: break-word;
+}
+
+#twitter-btn {
+    margin-top: 0.5em;
+}
+/* Media Queries */
+
 @media only screen and (max-width: 992px) {
     #poll-options {
         padding: 1em 20%;

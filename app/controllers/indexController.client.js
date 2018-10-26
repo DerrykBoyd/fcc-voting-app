@@ -101,6 +101,14 @@ var vm = new Vue({
       togglePolls: function () {
         this.showMyPolls = !this.showMyPolls;
         this.showAllPolls = !this.showAllPolls;
+      },
+      deletePoll: function(poll) {
+        let self = this;
+        $.post(appUrl + '/api/deletePoll?pollID=' + poll.pollID, (data) => {
+          console.log('Deleted: ' + data.pollID);
+          self.getMyPolls();
+          self.getPolls();
+        })
       }
     },
     beforeMount() {

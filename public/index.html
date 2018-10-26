@@ -60,13 +60,15 @@
 				<div id="poll-form" class="form-group">
 					<div class="mb-4">
 						<label class="col-form-label" for="inputDefault">Poll Question</label>
-						<input type="text" class="form-control" placeholder="Poll Question" id="inputDefault" v-model="pollData.question">
+						<input type="text" class="form-control" placeholder="Poll Question" 
+							id="inputDefault" v-model="pollData.question" maxlength="80">
 					</div>
 					<div id="poll-form-options" class="mt-2" v-for="(option, index) in pollData.options">
 						<label class="col-form-label col-form-label-sm" for="inputSmall">Option {{ index + 1 }}
-							<i v-if="index > 1" v-on:click="removeOption" class="fas fa-minus-circle p-0 text-danger"></i>
+							<i v-if="index > 1" v-on:click="removeOption(index)" class="fas fa-minus-circle p-0 text-danger"></i>
 						</label>
-						<input class="form-control form-control-sm" type="text" placeholder="poll option" id="inputSmall" v-model="option.title">
+						<input class="form-control form-control-sm" type="text" placeholder="poll option" 
+							id="inputSmall" v-model="option.title" maxlength="40">
 					</div>
 				</div>
 				<div>
@@ -83,8 +85,8 @@
 		<div v-if="!hideAllPolls" class="poll-list container mt-4">
 			<ul class="list-group">
 				<li class="list-group-item list-group-item-action text-center p-0" v-for="poll in polls">
-					<a class="d-block p-2" :href="'/poll/' + poll.pollID">
-						<p class="m-0">{{ poll.question }}</p>
+					<a class="d-block p-2 poll-link" :href="'/poll/' + poll.pollID">
+						<div class="m-0 poll-option d-block poll-q">{{ poll.question }}</div>
 					</a>
 				</li>
 			</ul>
@@ -92,9 +94,11 @@
 		<div v-if="!hideMyPolls" class="poll-list container mt-4">
 			<ul class="list-group">
 				<li class="list-group-item list-group-item-action text-center p-0" v-for="poll in myPolls">
-					<a class="d-block p-2" :href="'/poll/' + poll.pollID">
-						<p class="m-0">{{ poll.question }}</p>
+					<a class="d-block p-2 poll-link" :href="'/poll/' + poll.pollID">
+						<div class="m-0 poll-option d-block poll-q">{{ poll.question }}</div>
 					</a>
+					<button class="btn btn-danger poll-delete-btn"
+							v-on:click="deletePoll(poll)">Delete</button>
 				</li>
 			</ul>
 		</div>

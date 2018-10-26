@@ -44,6 +44,7 @@ var vm = new Vue({
     titles: [],
     loggedIn: false,
     selectedOption: '',
+    newOption: '',
   },
   methods: {
     getPollID: function() {
@@ -57,13 +58,26 @@ var vm = new Vue({
         self.pollOptions = data.options;
       });
     },
-    updateVotes: (option) => {
+    updateVotes: function(option) {
       console.log('updatingVotes... ' + option)
       let self = this;
       self.selectedOption = option;
       $.post(appUrl + '/api/' + vm.pollID + '/addVote?option=' + option + '&username=' + vm.username + '&userIP=' + vm.userIP, (err) => {
         if (err) console.log(err)
       }).done(chartTitles())
+    },
+    addOption: function() {
+      let option = this.newOption;
+      console.log('adding... ' + option)
+      $.post(appUrl + '/api/addOption?option=' + option + '&pollID=' + this.pollID, (err, res) => {
+        if (err) console.log(err);
+        console.log(res);
+      }).done(() => {
+        this.pollOptions.push({"title":option});
+        this.newOption = '';
+        this.getPollData();
+        chartTitles();
+      })
     }
   },
   beforeMount() {
@@ -100,13 +114,22 @@ function chartTitles() {
       titles.push(option.title);
     }
     // set the chart labels to the poll option titles
-    barChart.data.labels = titles;
+    let reducedTitles = []
+    titles.reduce((acc, cur)=> {
+      if (cur.length < 11) reducedTitles.push(cur)
+      else {
+        let shortStr = cur.slice(0, 10)
+        reducedTitles.push(shortStr)
+      }
+    }, 0)
+    barChart.data.labels = reducedTitles;
     // update bar chart with voter numbers
     $.get(appUrl + "/api/"+pollID+"/addVote", (data) => {
       // function that takes titles and data and returns voters in correct order in array
       voters = populateVotes(titles, data)
     }).done(() => {
       barChart.data.datasets[0].data = voters;
+      updateChartColors(voters);
       barChart.update();
     })
   });
@@ -128,6 +151,23 @@ function populateVotes (titles, votes) {
   return voteArr;
 }
 
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+function updateChartColors(voters) {
+  for (let i = 0; i < voters.length; i++) {
+    if (!barChart.data.datasets[0].backgroundColor[i]) {
+      barChart.data.datasets[0].backgroundColor.push(getRandomColor());
+    }
+  }
+}
+
 // Chart.js
 var ctx = $("#myChart");
 var barChart = new Chart(ctx, {
@@ -138,22 +178,7 @@ var barChart = new Chart(ctx, {
       {
         label: "# of Votes",
         data: [],
-        backgroundColor: [
-          "rgba(255, 0, 0, 0.8)",
-          "rgba(0, 0, 255, 0.8)",
-          "rgba(255, 255, 0, 0.8)",
-          "rgba(0, 255, 0, 0.8)",
-          "rgba(0, 255, 255, 0.8)",
-          "rgba(255, 0, 255, 0.8)"
-        ],
-        borderColor: [
-          "rgba(255,99,132,1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)"
-        ],
+        backgroundColor: [],
         borderWidth: 1
       }
     ]

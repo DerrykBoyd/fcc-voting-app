@@ -8,12 +8,11 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
 	 crossorigin="anonymous">
 	<link href="/public/css/main.css" rel="stylesheet" type="text/css">
-	<link href="/public/css/polls.css" rel="stylesheet"	type="text/css">
+	<link href="/public/css/polls.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
 </head>
 
 <body>
-	<!-- TODO!! CHANGE TO SHOW A POLL BASED ON QUERY PATH <pollID> -->
 	<div v-cloak id="app">
 		<nav class="navbar navbar-expand-sm navbar-dark bg-primary">
 			<a class="navbar-brand" href="#">Poll Creator</a>
@@ -43,19 +42,25 @@
 			<div class="fluid-container">
 				<div class="row">
 					<div id="poll-options" class="col-lg-6 border-right border-primary">
-						<fieldset>
+						<fieldset id="poll-area">
 							<legend id="poll-question">{{ pollQuestion }}</legend>
 							<div class="form-group">
 								<div v-for="(option, index) in pollOptions" class="custom-control custom-radio">
-									<input 	type="radio"
-											:id="option.title"
-											:checked="option.title == selectedOption"
-											v-on:change="updateVotes(option.title)"
-											name="customRadio" class="custom-control-input">
-									<label class="custom-control-label" :for="option.title">{{ option.title }}</label>
+									<input type="radio" :id="option.title" :checked="option.title == selectedOption" v-on:change="updateVotes(option.title)"
+									 name="customRadio" class="custom-control-input">
+									<label class="custom-control-label poll-label" :for="option.title">{{ option.title }}</label>
 								</div>
 							</div>
 						</fieldset>
+						<div id="add-option" v-if="loggedIn">
+							<input type="text" v-model="newOption" id="new-option" placeholder="New Option" required>
+							<button class="btn btn-primary" @click="addOption">Add Option</button>
+						</div>
+						<div id="twitter-btn" v-if="loggedIn">
+							<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-text="Check out this fccPoll!"
+							 data-show-count="false">Tweet</a>
+							<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+						</div>
 					</div>
 					<div class="col-lg-6">
 						<canvas id="myChart" width="400" height="400"></canvas>

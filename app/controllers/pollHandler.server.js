@@ -60,6 +60,13 @@ function PollHandler () {
 		res.send();
 	};
 
+	this.deletePoll = function (req, res) {
+		fccPollPolls.findOneAndDelete({"pollID":req.query.pollID}, (err, doc) => {
+			if (err) console.log(err);
+			res.send(doc);
+		})
+	}
+
 	// get all votes for all polls
 	this.getVotes = function (req, res) {
 		fccPollVotes.find({}, (err, results) => {
@@ -129,6 +136,17 @@ function PollHandler () {
 			})
 		}
 	};
+
+	this.addOption = function (req, res) {
+		// Adds a new option to the current poll
+		let pollID = req.query.pollID;
+		let option = req.query.option;
+		fccPollPolls.findOneAndUpdate({"pollID": pollID}, {$push: {
+			options : {"title": option}}}, (err) => {
+				if (err) res.send(err.message)
+				else res.send('Option Added')
+		})
+	}
 }
 
 module.exports = PollHandler;

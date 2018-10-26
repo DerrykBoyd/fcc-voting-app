@@ -50,6 +50,26 @@ p {
 	margin: 1em auto 0.5em;
 }
 
+.poll-option {
+	display: inline-block;
+}
+
+.poll-link {
+	min-height: 38px;
+}
+
+.poll-delete-btn {
+	position: absolute;
+	right: 0.5rem;
+	top: 3px;
+	height: 32px;
+	font-size: 0.8rem;
+}
+
+.poll-q {
+	word-wrap: break-word;
+}
+
 /****** Login Styling ******/
 
 .login {
@@ -77,11 +97,10 @@ p {
 }
 
 i {
-	height: 100%;
 	padding-top: 20px;
 }
 
-.btn > img, .btn > i {
+.btn-img {
 	float: left;
 	margin-left: 10px;
 	font-size: 32px;
@@ -92,7 +111,7 @@ i {
 
 /***** Form Styling *****/
 
-.btn i {
+#newPoll .btn i {
 	font-size: 1.2rem;
 	max-height: 1.2rem;
 	margin: 0 0.5rem 0 0;

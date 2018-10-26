@@ -89,5 +89,11 @@ module.exports = function (app, passport) {
 		.get(pollHandler.getVotes)
 
 	app.route('/api/checkVote')
-	.post(pollHandler.checkVote)
+		.post(pollHandler.checkVote)
+
+	app.route('/api/addOption')
+		.post(pollHandler.addOption)
+
+	app.route('/api/deletePoll')
+		.post(pollHandler.deletePoll)
 };
