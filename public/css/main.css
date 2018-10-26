@@ -96,9 +96,9 @@ p {
 	padding: 0;
 }
 
-i {
+/* i {
 	padding-top: 20px;
-}
+} */
 
 .btn-img {
 	float: left;
@@ -111,7 +111,7 @@ i {
 
 /***** Form Styling *****/
 
-#newPoll .btn i {
+#new-poll .btn i {
 	font-size: 1.2rem;
 	max-height: 1.2rem;
 	margin: 0 0.5rem 0 0;
