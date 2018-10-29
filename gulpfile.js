@@ -5,21 +5,21 @@ var nodemon = require('gulp-nodemon');
 
 
 gulp.task('browser-sync', ['nodemon'], function() {
-    browserSync.init(null, {
-        proxy: "http://localhost:8080", // port of node server
-    });
+  browserSync.init(null, {
+    proxy: 'http://localhost:8080', // port of node server
+  });
 });
 
 gulp.task('default', ['browser-sync'], function () {
-    gulp.watch(["public/**/*.html", "app/**/*.js", "public/**/*.css"], reload);
+  gulp.watch(['public/**/*.html', 'app/**/*.js', 'public/**/*.css'], reload);
 });
 
 gulp.task('nodemon', function (cb) {
-    var callbackCalled = false;
-    return nodemon({script: './server.js'}).on('start', function () {
-        if (!callbackCalled) {
-            callbackCalled = true;
-            cb();
-        }
-    });
+  var callbackCalled = false;
+  return nodemon({script: './server.js'}).on('start', function () {
+    if (!callbackCalled) {
+      callbackCalled = true;
+      cb();
+    }
+  });
 });

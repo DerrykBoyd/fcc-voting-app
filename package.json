@@ -38,6 +38,9 @@
     "short-unique-id": "^1.1.1"
   },
   "devDependencies": {
+    "eslint": "^5.8.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
     "gulp": "3.9.1",
     "gulp-nodemon": "^2.2.1"
   }
